@@ -1,30 +1,29 @@
+;; Validator Verification Contract
+;; Validates governance participants
 
-;; title: validator-verification
-;; version:
-;; summary:
-;; description:
+(define-data-var min-stake uint u10000)
+(define-map validators principal uint)
 
-;; traits
-;;
+;; Register as a validator with a stake
+(define-public (register-validator (stake uint))
+  (let ((current-stake (default-to u0 (map-get? validators tx-sender))))
+    (asserts! (>= stake (var-get min-stake)) (err u1))
+    (ok (map-set validators tx-sender stake))))
 
-;; token definitions
-;;
+;; Check if an address is a validator
+(define-read-only (is-validator (address principal))
+  (is-some (map-get? validators address)))
 
-;; constants
-;;
+;; Get validator stake
+(define-read-only (get-validator-stake (address principal))
+  (default-to u0 (map-get? validators address)))
 
-;; data vars
-;;
+;; Update minimum stake requirement (admin only)
+(define-public (update-min-stake (new-min-stake uint))
+  (begin
+    (asserts! (is-eq tx-sender (contract-owner)) (err u100))
+    (ok (var-set min-stake new-min-stake))))
 
-;; data maps
-;;
-
-;; public functions
-;;
-
-;; read only functions
-;;
-
-;; private functions
-;;
-
+;; Get the contract owner
+(define-read-only (contract-owner)
+  (as-contract tx-sender))
