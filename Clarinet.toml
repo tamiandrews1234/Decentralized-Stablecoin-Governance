@@ -1,0 +1,29 @@
+[project]
+name = 'Decentralized-Stablecoin-Governance'
+description = ''
+authors = []
+telemetry = true
+cache_dir = './.cache'
+requirements = []
+[contracts.collateral-management]
+path = 'contracts/collateral-management.clar'
+clarity_version = 2
+epoch = 2.5
+
+[contracts.price-oracle]
+path = 'contracts/price-oracle.clar'
+clarity_version = 2
+epoch = 2.5
+
+[contracts.validator-verification]
+path = 'contracts/validator-verification.clar'
+clarity_version = 2
+epoch = 2.5
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
